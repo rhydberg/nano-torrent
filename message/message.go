@@ -51,8 +51,8 @@ func (m *Message) Serialize() []byte {
 	return buf
 }
 
-func ReadMessage(r io.Reader) (*Message, error){
-	lengthBuf := make([]byte, 4)
+func Read(r io.Reader) (*Message, error){
+    lengthBuf := make([]byte, 4)
 	_,err := io.ReadFull(r, lengthBuf)
 	if err!=nil{
 		return nil, err
@@ -78,4 +78,41 @@ func ReadMessage(r io.Reader) (*Message, error){
 
 	return &message, nil
 }
+
+
+//Fixed length, used to request a block of pieces. The payload contains integer values specifying the index, begin location and length.
+func CreateRequestMessage(index, begin, length int) *Message{
+	requestLength:=13
+	payload := make([]byte, 12)
+	binary.BigEndian.PutUint32(payload[0:4], uint32(index))
+	binary.BigEndian.PutUint32(payload[4:8], uint32(begin))
+	binary.BigEndian.PutUint32(payload[8:12], uint32(length))
+
+	message:=Message{
+		Length: uint32(requestLength),
+		ID: MsgRequest,
+		Payload: payload,
+	}
+
+	return &message
+}
+
+//The 'have' message's payload is a single number, the index which that downloader just completed and checked the hash of.
+func CreateHaveMessage(index int) *Message{
+	haveLength := 5
+	payload := make ([]byte, 4)
+	binary.BigEndian.PutUint32(payload[:], uint32(index))
+
+	message:=Message{
+		Length: uint32(haveLength),
+		ID: MsgHave,
+		Payload: payload,
+	}
+
+	return &message
+}
+
+
+
+
 
