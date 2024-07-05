@@ -44,7 +44,7 @@ func (tf TorrentFile) buildTrackerURL() (string, error) {
 
 }
 
-func (tf TorrentFile) RequestPeers() {
+func (tf TorrentFile) RequestPeers() ([]peers.Peer, error) {
 	url, err:= tf.buildTrackerURL()
 	if err!=nil{
 		log.Fatal("Could not build tracker URL")
@@ -65,7 +65,7 @@ func (tf TorrentFile) RequestPeers() {
 		log.Fatal("Could not unmarshal requenst ", err)
 	}
 
-	peers, err := peers.GetPeers([]byte(trResp.Peers))
+	return peers.GetPeers([]byte(trResp.Peers))
 
-	fmt.Printf("%v", peers)
+	
 }

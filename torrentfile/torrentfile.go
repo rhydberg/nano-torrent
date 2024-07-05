@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"crypto/rand"
 	"crypto/sha1"
+	"fmt"
+
 	// "fmt"
 	"log"
 	"os"
@@ -25,6 +27,7 @@ type TorrentFile struct {
 	InfoHash     [20]byte
 	Info         torrentInfo `bencode:"info"`
 	PeerID       [20]byte
+	PieceHashes  [][20]byte
 }
 
 func (tf TorrentFile) getInfoHash() ([20]byte, error) {
@@ -49,6 +52,25 @@ func (tf TorrentFile) getPeerID() ([20]byte, error) {
 	return pid, nil
 }
 
+func (tf TorrentFile) getPieceHashes() ([][20]byte, error){
+	lenHash := 20
+	buf:=[]byte(tf.Info.Pieces)
+	if len(buf)%lenHash !=0{
+		return nil, fmt.Errorf("pieces not a multiple of 20")
+	}
+
+	numHashes := len(buf)/lenHash
+
+	pieceHashes := make([][20]byte, numHashes)
+
+	for i:=0;i<numHashes;i++{
+		offset := i*lenHash
+		copy(pieceHashes[i][:], buf[offset:offset+lenHash])
+	}
+
+	return pieceHashes, nil
+}
+
 func GetTorrentFile(path string) (TorrentFile, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -63,6 +85,14 @@ func GetTorrentFile(path string) (TorrentFile, error) {
 	tf.InfoHash, err = tf.getInfoHash()
 	if err != nil {
 		log.Fatal("Unable to get info hash")
+	}
+
+
+
+	tf.PieceHashes, err = tf.getPieceHashes()
+
+	if err!=nil{
+		log.Fatal("could not split into hashes, ",err)
 	}
 
 	tf.PeerID, err = tf.getPeerID()

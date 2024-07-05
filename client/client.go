@@ -3,8 +3,10 @@ package client
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"net"
 	"time"
+
 	"github.com/rhydberg/gotorrent/bitfield"
 	"github.com/rhydberg/gotorrent/handshake"
 	"github.com/rhydberg/gotorrent/message"
@@ -33,11 +35,15 @@ func New(peer peers.Peer, infoHash, peerID [20]byte) (*Client, error){
 		return nil, err
 	}
 
+	log.Println("did handshake with ", peer)
+
 	bf, err := receiveBitfield(conn) //'bitfield' is only ever sent as the first message.
 	if err!=nil{
 		conn.Close()
 		return nil, err
 	}
+
+	// fmt.Println("received bitfield %v ", bf)
 
 	client:= Client{
 		Conn: conn,
@@ -88,7 +94,7 @@ func doHandshake(conn net.Conn, infoHash, peerID [20]byte)(*handshake.Handshake,
 		return nil ,err
 	}
 	if !bytes.Equal(response.InfoHash[:], infoHash[:]){
-		return nil, fmt.Errorf("Expected infohash %x but got %x", response.InfoHash, infoHash)
+		return nil, fmt.Errorf("expected infohash %x but got %x", response.InfoHash, infoHash)
 	}
 
 	return response, nil
