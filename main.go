@@ -32,7 +32,7 @@ func main() {
 
 	// url, _ := tf.buildTrackerURL()
 	// fmt.Printf("%v", url)
-	// p, err:= tf.RequestPeers()
+	p, err:= tf.RequestPeers()
 
 	// for _,peer := range(p){
 	// 	_=handshake.New(tf.InfoHash, tf.PeerID)

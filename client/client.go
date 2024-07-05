@@ -100,3 +100,32 @@ func doHandshake(conn net.Conn, infoHash, peerID [20]byte)(*handshake.Handshake,
 	return response, nil
 }
 
+func (c *Client) SendUnchoke() error{
+	msg := message.Message{
+		Length: 1,
+		ID: message.MsgUnchoke,
+	}
+	_, err:= c.Conn.Write(msg.Serialize())
+	return err
+
+}
+
+func (c *Client) SendInterested() error {
+	msg := message.Message{
+		Length: 1,
+		ID: message.MsgInterested}
+	_, err := c.Conn.Write(msg.Serialize())
+	return err
+}
+
+func (c *Client) SendRequest(index, begin, length int) error{
+	req := message.CreateRequestMessage(index, begin, length)
+	_, err:= c.Conn.Write(req.Serialize())
+	return err
+}
+
+func (c*Client) SendHave(index int) error{
+	msg:=message.CreateHaveMessage(index)
+	_, err := c.Conn.Write(msg.Serialize())
+	return err
+}
