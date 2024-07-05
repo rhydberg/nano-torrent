@@ -17,7 +17,7 @@ type  trackerResponse struct{
 	Peers string `bencode:"peers"`
 }
 
-func (tf TorrentFile) buildTrackerURL() (string, error) {
+func (tf TorrentFile) BuildTrackerURL() (string, error) {
 	base, err := url.Parse(tf.Announce)
 	if err != nil {
 		return "", err
@@ -45,7 +45,7 @@ func (tf TorrentFile) buildTrackerURL() (string, error) {
 }
 
 func (tf TorrentFile) RequestPeers() ([]peers.Peer, error) {
-	url, err:= tf.buildTrackerURL()
+	url, err:= tf.BuildTrackerURL()
 	if err!=nil{
 		log.Fatal("Could not build tracker URL")
 

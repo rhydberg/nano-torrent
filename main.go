@@ -3,12 +3,12 @@ package main
 import (
 	// "fmt"
 	"flag"
-	// "fmt"
+	"fmt"
 	"log"
 	"os"
 
-	// "github.com/rhydberg/gotorrent/client"
-	// "github.com/rhydberg/gotorrent/handshake"
+	"github.com/rhydberg/gotorrent/client"
+	"github.com/rhydberg/gotorrent/handshake"
 	"github.com/rhydberg/gotorrent/torrentfile"
 )
 
@@ -49,16 +49,16 @@ func main() {
 
 
 
-	// fmt.Printf("%+v", tf.PieceHashes)
+	fmt.Printf("%+v", tf.PieceHashes)
 
-	// url, _ := tf.buildTrackerURL()
-	// fmt.Printf("%v", url)
-	// p, err:= tf.RequestPeers()
+	url, _ := tf.BuildTrackerURL()
+	fmt.Printf("%v", url)
+	p, err:= tf.RequestPeers()
 
-	// for _,peer := range(p){
-	// 	_=handshake.New(tf.InfoHash, tf.PeerID)
-	// 	_,_=client.New(peer, tf.InfoHash, tf.PeerID)
-	// }
+	for _,peer := range(p){
+		_=handshake.New(tf.InfoHash, tf.PeerID)
+		_,_=client.New(peer, tf.InfoHash, tf.PeerID)
+	}
 
 
 }
