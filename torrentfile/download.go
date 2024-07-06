@@ -137,7 +137,7 @@ func (tf *TorrentFile) startDownloadWorker(peer peers.Peer, workQueue chan *piec
 		buf, err := attemptDownloadPiece(client, pw)
 		
 		if err!=nil{
-			log.Printf("Piece #%d failed integrity check\n", pw.index)
+			log.Printf("Piece #%d failed to download\n", pw.index)
 			workQueue <- pw // Put piece back on the queue
 			continue
 		}
