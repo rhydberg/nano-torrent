@@ -1,7 +1,7 @@
 package torrentfile
 
 import (
-	"fmt"
+	// "fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -24,8 +24,8 @@ func (tf TorrentFile) BuildTrackerURL() (string, error) {
 	}
 
 	port := 6667
-	fmt.Println(string(tf.InfoHash[:]))
-	fmt.Println(string(tf.PeerID[:]))
+	// fmt.Println(string(tf.InfoHash[:]))
+	// fmt.Println(string(tf.PeerID[:]))
 	params := url.Values{
 		"info_hash":  []string{string(tf.InfoHash[:])},
 		"peer_id":    []string{string(tf.PeerID[:])},
