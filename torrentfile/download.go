@@ -116,7 +116,7 @@ func checkIntegrity(pw *pieceWork, buf []byte) error {
 }
 
 func (tf *TorrentFile) startDownloadWorker(peer peers.Peer, workQueue chan *pieceWork, results chan *pieceResult){
-	client, err := client.New(peer, tf.PeerID, tf.InfoHash)
+	client, err := client.New(peer, tf.InfoHash, tf.PeerID)
 	fmt.Println("Making client for ", peer.IP)
 	if err!=nil{
 		log.Print("could not create client for",peer.IP, err)

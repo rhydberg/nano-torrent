@@ -3,12 +3,12 @@ package main
 import (
 	// "fmt"
 	"flag"
-	"fmt"
+	// "fmt"
 	"log"
 	"os"
 
-	"github.com/rhydberg/gotorrent/client"
-	"github.com/rhydberg/gotorrent/handshake"
+	// "github.com/rhydberg/gotorrent/client"
+	// "github.com/rhydberg/gotorrent/handshake"
 	"github.com/rhydberg/gotorrent/torrentfile"
 )
 
@@ -34,7 +34,7 @@ func main() {
 		log.Fatalf("Error parsing torrent file")
 	}
 
-	outFile,err := os.Create(*out)
+	outFile,_ := os.Create(*out)
 	buf, err := tf.Download()
 	if err!=nil{
 		log.Fatal("Error downloading", err)
@@ -45,20 +45,5 @@ func main() {
 	if err!=nil{
 		log.Fatal("Error writing to file ", err)
 	}
-
-
-
-
-	fmt.Printf("%+v", tf.PieceHashes)
-
-	url, _ := tf.BuildTrackerURL()
-	fmt.Printf("%v", url)
-	p, err:= tf.RequestPeers()
-
-	for _,peer := range(p){
-		_=handshake.New(tf.InfoHash, tf.PeerID)
-		_,_=client.New(peer, tf.InfoHash, tf.PeerID)
-	}
-
 
 }
