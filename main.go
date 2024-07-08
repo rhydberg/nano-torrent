@@ -12,20 +12,15 @@ import (
 	"github.com/rhydberg/gotorrent/torrentfile"
 )
 
-
-
-func fn(s []int){
-	s = append(s[:0], 2,3)
+func fn(s []int) {
+	s = append(s[:0], 2, 3)
 }
-
-
-
 
 func main() {
 	debian_path := "debian-12.5.0-amd64-netinst.iso.torrent"
 
-	path:= flag.String("p", debian_path, "The path to the torrent file")
-	out:= flag.String("o", "out", "the output file")
+	path := flag.String("p", debian_path, "The path to the torrent file")
+	out := flag.String("o", "out", "the output file")
 	flag.Parse()
 
 	tf, err := torrentfile.GetTorrentFile(*path)
@@ -34,15 +29,15 @@ func main() {
 		log.Fatalf("Error parsing torrent file")
 	}
 
-	outFile,_ := os.Create(*out)
+	outFile, _ := os.Create(*out)
 	buf, err := tf.Download()
-	if err!=nil{
+	if err != nil {
 		log.Fatal("Error downloading", err)
 	}
 	defer outFile.Close()
 	_, err = outFile.Write(buf)
 
-	if err!=nil{
+	if err != nil {
 		log.Fatal("Error writing to file ", err)
 	}
 
